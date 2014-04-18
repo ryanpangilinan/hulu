@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+        <link rel="stylesheet" href="css/normalize.css">
+        <link rel="stylesheet" href="css/main.css">
+        <script src="js/vendor/modernizr-2.6.2.min.js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+
+    </head>
+    <body>
+        <script src="js/main.js"></script>
+        <div id="videoPlayerComponent"></div>
+        <div id="adComponent"></div>
+        
+        <script src="http://config.hulu.com/js/hulu_global.js?guid=0B1CEA04-DCCB-40cf-AD0E-5222EF66D519&partner=FBCTest" id="NS_GUID_JS" type="text/javascript"></script>
+        <script>
+            var huluController = NewSite;
+            FDM_Player_vars = {
+                flash:      11,
+                host:       ((window.location.protocol == 'https:')?'https':'http') + '://player.foxfdm.com',
+                events:     [],
+                isFlash:    0,
+                isIOS:      0
+            };
+            /**Omniture specific configuration for both Flash/JS**/
+            FDM_Player_vars.omniConfig  = {
+                playerId        :"foxcomcom-1.4.527",
+                visitorNamespace:"foxentertainment",
+                host            :'a.fox.com',
+                frequency       :"60",
+                entitled        :"public",  //values: public or entitled
+                auth            :"true",
+                mvpd            :null, //value of prop/eVar is the MVDP name of the user.
+                network         :"foxcom",
+                //extraInfo       :(typeof player.extraInfo !=  "undefined")?player.extraInfo : null,
+                accountInfo     : {
+                    account:  'foxcomprod',
+                    trackingServer:'a.fox.com'      },
+                customAdMetadata: {
+                    test: 'test'
+                }
+            };
+
+            function _init() {
+                var PageLoader = {
+                    init: function() {
+                        huluController.adComponent.hide();
+                        var qs = huluController.getQueryString();
+                        var contentId = qs.contentId || qs.contentid || qs.CONTENTID;
+      
+                        huluController.videoPlayerComponent.playVideo("60318596");
+
+                        var b = document.getElementsByTagName('body')[0],
+                        j = document.createElement('script');
+
+                        j.type='text/javascript';
+                        j.src='OmnitureHulu.js';
+
+                        b.appendChild(j);   
+                        this.setListeners();                 
+                    },
+
+                    handle: function() {
+                        //alert("yessir");
+                    },
+
+                    setListeners: function(){
+                        huluController.addListener("videoAdBegin", PageLoader, "handle");
+                    }
+                };
+
+                if (huluController.readyEventFired()) {
+                    PageLoader.init();
+                }
+                else {
+                    huluController.addListener("newsiteReady", PageLoader, "init");
+                }
+
+                
+                
+
+            }
+            _init();
+
+
+        </script>       
+    </body>
+</html>
